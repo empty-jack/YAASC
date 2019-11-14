@@ -2,6 +2,10 @@
 
 A list of checks with tips for analyzing the security of Android applications
 
+Based on [OWASP MASVS](https://mobile-security.gitbook.io/masvs/) and [OWASP MSTG](https://mobile-security.gitbook.io/mobile-security-testing-guide/)
+
+## L1 security verification level
+
 ### Backupping && debugging (MSTG-STORAGE-8)
 
 - Allow backup (+ fullBackupContent)
@@ -91,6 +95,8 @@ A list of checks with tips for analyzing the security of Android applications
 - Looking for showed on app screen `passwords`, `PAN`, `credentials`, etc...
 
 <!-- If you despaired or just "L2 security verification level" -->
+
+## L2 security verification level
 
 ### Determining Whether the Keyboard Cache Is Disabled for Text Input Fields (MSTG-STORAGE-5)
 
