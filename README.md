@@ -6,7 +6,13 @@ Based on [OWASP MASVS](https://mobile-security.gitbook.io/masvs/) and [OWASP MST
 
 ## L1 security verification level
 
-### Backupping && debugging (MSTG-STORAGE-8)
+Starting with open AndroidManifest.xml. 
+
+For fast and easy analizing you can use [MobSF](Mobile-Security-Framework-MobSF).
+
+## Code Quality
+
+### Backupping && debugging (MSTG-STORAGE-8, MSTG‑CODE‑2)
 
 - Allow backup (+ fullBackupContent)
 - Allow debug
@@ -17,10 +23,12 @@ Based on [OWASP MASVS](https://mobile-security.gitbook.io/masvs/) and [OWASP MST
 - res/values/strings.xml
 - local.properties or gradle.properties
 
-### Testing Logs for Sensitive Data (MSTG-STORAGE-3)
+### Testing Logs for Sensitive Data (MSTG-STORAGE-3, MSTG‑CODE‑4)
 
 - Dynamic Ananlysis (`adb logcat`)
 - Static Ananlysis (`android.util.Log`,`Log.`,`Logger`,`System.out.print`,`System.error.print`,`logfile`,`logging`,`logs`)
+
+## Networks
 
 ### Unsafe Traffic (MSTG‑NETWORK‑1)
 
@@ -40,6 +48,12 @@ Based on [OWASP MASVS](https://mobile-security.gitbook.io/masvs/) and [OWASP MST
 
 - Check that tracker services, monitor user behavior, sell banner advertisements, improve the user experience, and more do not send sesitive data to third parties.
 
+## Storage
+
+### Checking for Sensitive Data Disclosure Through the User Interface (MSTG-STORAGE-7)
+
+- Looking for showed on app screen `passwords`, `PAN`, `credentials`, etc...
+
 ### Storage of PII (Personal Identifying Information) and sensetive information (MSTG-STORAGE-1 and MSTG-STORAGE-2)
 
 - Shared Preferences
@@ -54,15 +68,11 @@ Based on [OWASP MASVS](https://mobile-security.gitbook.io/masvs/) and [OWASP MST
 
 - Check the permissions of the files in `/data/data/<package-name>`.
 
-### Using Third Party Secure storing libraries (MSTG-STORAGE-1)
-
-- Java AES Crypto - A simple Android class for encrypting and decrypting strings.
-- SQL Cipher - SQLCipher is an open source extension to SQLite that provides transparent 256-bit AES encryption of database files.
-- Secure Preferences - Android Shared preference wrapper than encrypts the keys and values of Shared Preferences. (Check what is a secret password/key for generetion key / Check where storing a key for decrypt SP(It can get into backup data))
-
 ### Misc development info in app (MSTG‑ARCH‑1)
 
 - Identify development files, backup files, and old files that shouldn't be included with a production release.
+
+## Input validation and IPC
 
 ### Testing Local Storage for Input Validation (MSTG-PLATFORM-2)
 
@@ -90,13 +100,39 @@ Based on [OWASP MASVS](https://mobile-security.gitbook.io/masvs/) and [OWASP MST
 	- Use `adb` for trigger IPC mech-s
 	- Drozer for check attack surface and IPC entrypoints
 
-### Checking for Sensitive Data Disclosure Through the User Interface (MSTG-STORAGE-7)
+## CRYPTO
 
-- Looking for showed on app screen `passwords`, `PAN`, `credentials`, etc...
+### Using Third Party Secure storing libraries (MSTG-STORAGE-1)
 
-<!-- If you despaired or just "L2 security verification level" -->
+- Java AES Crypto - A simple Android class for encrypting and decrypting strings.
+- SQL Cipher - SQLCipher is an open source extension to SQLite that provides transparent 256-bit AES encryption of database files.
+- Secure Preferences - Android Shared preference wrapper than encrypts the keys and values of Shared Preferences. (Check what is a secret password/key for generetion key / Check where storing a key for decrypt SP(It can get into backup data))
+
+### The app does not rely on symmetric cryptography with hardcoded keys as a sole method of encryption.
+
+- Looking for Private Keys in Storages and code
+	- Key
+	- PrivateKey
+	- PublicKey
+	- SecretKey
+- Сheck cryptographic methods and algorithms for using symmetric cryptography
+	- java.security.*
+	- javax.crypto.*
+	- android.security.*
+	- org.bouncycastle.*
+	- org.spongycastle.*
+	- crypto
+	- Cipher
+	- Mac
+	- MessageDigest
+	- Signature
+	- Security
+- Check Secure Random Generators
+	- is no longer support SHA1PRNG
 
 ## L2 security verification level
+
+<!-- If you despaired or just "L2 security verification level" -->
 
 ### Determining Whether the Keyboard Cache Is Disabled for Text Input Fields (MSTG-STORAGE-5)
 
@@ -115,4 +151,12 @@ Based on [OWASP MASVS](https://mobile-security.gitbook.io/masvs/) and [OWASP MST
 
 - Is /*identify sensitive information*/ or /*credentials*/ stored in memory too long.
 
-### Testing the Device-Access-Security Policy (MSTG-STORAGE-11)
+### Testing the Device-Access-Security Policy (MSTG-SDjTORAGE-11)
+
+Apps that process or query sensitive information should run in a trusted and secure environment. 
+
+- PIN- or password-protected device locking
+- Recent Android OS version
+- USB Debugging activation
+- Device encryption
+- Device rooting (see also "Testing Root Detection")
