@@ -10,7 +10,7 @@ Starting with open AndroidManifest.xml.
 
 For fast and easy analizing you can use [MobSF](Mobile-Security-Framework-MobSF).
 
-## Code Quality
+## CODE QUALITY
 
 ### Backupping && debugging (MSTG-STORAGE-8, MSTG‑CODE‑2)
 
@@ -22,13 +22,14 @@ For fast and easy analizing you can use [MobSF](Mobile-Security-Framework-MobSF)
 - AndroidManifest.xml
 - res/values/strings.xml
 - local.properties or gradle.properties
+-  res/assets/*
 
 ### Testing Logs for Sensitive Data (MSTG-STORAGE-3, MSTG‑CODE‑4)
 
 - Dynamic Ananlysis (`adb logcat`)
 - Static Ananlysis (`android.util.Log`,`Log.`,`Logger`,`System.out.print`,`System.error.print`,`logfile`,`logging`,`logs`)
 
-## Networks
+## NETWORKS
 
 ### Unsafe Traffic (MSTG‑NETWORK‑1)
 
@@ -48,7 +49,7 @@ For fast and easy analizing you can use [MobSF](Mobile-Security-Framework-MobSF)
 
 - Check that tracker services, monitor user behavior, sell banner advertisements, improve the user experience, and more do not send sesitive data to third parties.
 
-## Storage
+## STORAGE
 
 ### Checking for Sensitive Data Disclosure Through the User Interface (MSTG-STORAGE-7)
 
@@ -129,6 +130,12 @@ For fast and easy analizing you can use [MobSF](Mobile-Security-Framework-MobSF)
 	- Security
 - Check Secure Random Generators
 	- is no longer support SHA1PRNG
+
+### Testing Random Number Generation (MSTG-CRYPTO-6)
+
+Insecure classes:
+	- java.util.Random (PRGN can produce predictable numbers if the generator is known and the seed can be guessed.)
+
 
 ## L2 security verification level
 
