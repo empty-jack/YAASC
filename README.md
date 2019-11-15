@@ -87,7 +87,7 @@ For fast and easy analizing you can use [MobSF](Mobile-Security-Framework-MobSF)
 	- Activities
 	- Receivers
 
-! Look at `android:exported=true`, `intent-filters`, `android:permission`, `android:protectionLevel=signature`
+**!** Look at `android:exported=true`, `intent-filters`, `android:permission`, `android:protectionLevel=signature`
 
 - Static Analysis:
 	- `android.content.ContentProvider`
@@ -103,20 +103,24 @@ For fast and easy analizing you can use [MobSF](Mobile-Security-Framework-MobSF)
 
 ## CRYPTO
 
-### Using Third Party Secure storing libraries (MSTG-STORAGE-1)
+### Testing Key Management and Implementation of crypto primitives (MSTG-STORAGE-1, MSTG-CRYPTO-1 - 5)
 
-- Java AES Crypto - A simple Android class for encrypting and decrypting strings.
-- SQL Cipher - SQLCipher is an open source extension to SQLite that provides transparent 256-bit AES encryption of database files.
-- Secure Preferences - Android Shared preference wrapper than encrypts the keys and values of Shared Preferences. (Check what is a secret password/key for generetion key / Check where storing a key for decrypt SP(It can get into backup data))
-
-### The app does not rely on symmetric cryptography with hardcoded keys as a sole method of encryption.
+-Looking for keys and secrets in Storages and resources
+	- AndroidManifest.xml
+	- res/values/strings.xml
+	- local.properties or gradle.properties
+	- res/assets/*
+	- Android Storages
 
 - Looking for Private Keys in Storages and code
 	- Key
 	- PrivateKey
 	- PublicKey
 	- SecretKey
-- Сheck cryptographic methods and algorithms for using symmetric cryptography
+	- KeyInfo
+
+
+- Сheck cryptographic methods and algorithms
 	- java.security.*
 	- javax.crypto.*
 	- android.security.*
@@ -128,13 +132,49 @@ For fast and easy analizing you can use [MobSF](Mobile-Security-Framework-MobSF)
 	- MessageDigest
 	- Signature
 	- Security
-- Check Secure Random Generators
-	- is no longer support SHA1PRNG
 
 ### Testing Random Number Generation (MSTG-CRYPTO-6)
 
 Insecure classes:
 	- java.util.Random (PRGN can produce predictable numbers if the generator is known and the seed can be guessed.)
+	- is no longer support SHA1PRNG
+
+
+### Using Third Party Secure storing libraries (MSTG-STORAGE-1, MSTG‑CRYPTO‑1 - 4)
+
+- Java AES Crypto - A simple Android class for encrypting and decrypting strings.
+- SQL Cipher - SQLCipher is an open source extension to SQLite that provides transparent 256-bit AES encryption of database files.
+- Secure Preferences - Android Shared preference wrapper than encrypts the keys and values of Shared Preferences. (Check what is a secret password/key for generetion key / Check where storing a key for decrypt SP(It can get into backup data))
+
+## LOCAL AUTHENTICATION
+
+### Testing Confirm Credentials (MSTG-AUTH-1 and MSTG-STORAGE-11)
+
+The easiest way to check it is to do it dynamically.
+
+	- Does the application have its own authentication mechanism? 
+	- Does th application check access using the existing password or biometric authentication mechanism?
+	- Is it possible to get access to the application interface on the device without screen lock mechanism?
+
+**!** If the application doesn't have its own authentication mechanism it should check that device have screen lock mechanism with a password or biometric key.
+
+You can also search for classes used for local authentication:
+	- KeyguardManager - check that lock screen have password.
+	- biometricManager - for biometric authentication.
+	- BiometricPrompt - for dialog with user.
+
+
+### Session management (MSTG‑AUTH‑2 - 5)
+
+- If stateful session management is used, the remote endpoint uses randomly generated session identifiers to authenticate client requests without sending the user's credentials. (Just check entropy of session tokens) (MSTG‑AUTH‑2)
+
+- If stateless token-based authentication is used, the server provides a token that has been signed using a secure algorithm. (Check JWT Security: `none`-algorithm / brute-force secret key / RS256 changing on HS256 with public key signing) (MSTG‑AUTH‑3)
+
+- The remote endpoint terminates the existing session when the user logs out. (MSTG‑AUTH‑4)
+
+
+- A password policy exists and is enforced at the remote endpoint. (MSTG‑AUTH‑5)
+
 
 
 ## L2 security verification level
@@ -167,3 +207,18 @@ Apps that process or query sensitive information should run in a trusted and sec
 - USB Debugging activation
 - Device encryption
 - Device rooting (see also "Testing Root Detection")
+
+### Testing Biometric Authentication (MSTG-AUTH-8)
+
+Biometric authentication, if any, is not event-bound (i.e. using an API that simply returns "true" or "false"). Instead, it is based on unlocking the keychain/keystore.
+
+For example: 
+```
+public void authenticationSucceeded(FingerprintManager.AuthenticationResult result) {
+    cipher = result.getCryptoObject().getCipher();
+
+    //(... do something with the authenticated cipher object ...)
+}
+```
+
+If app does not use cipher object and simply checks its appearance, this is called "event-bound authentication".
