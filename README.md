@@ -73,7 +73,9 @@ For fast and easy analizing you can use [MobSF](Mobile-Security-Framework-MobSF)
 
 - Identify development files, backup files, and old files that shouldn't be included with a production release.
 
+
 ### Input validation and IPC
+
 
 #### Testing Local Storage for Input Validation (MSTG-PLATFORM-2)
 
@@ -101,7 +103,9 @@ For fast and easy analizing you can use [MobSF](Mobile-Security-Framework-MobSF)
 	- Use `adb` for trigger IPC mech-s
 	- Drozer for check attack surface and IPC entrypoints
 
+
 ### CRYPTO
+
 
 #### Testing Key Management and Implementation of crypto primitives (MSTG-STORAGE-1, MSTG-CRYPTO-1 - 5)
 
@@ -146,7 +150,9 @@ Insecure classes:
 - SQL Cipher - SQLCipher is an open source extension to SQLite that provides transparent 256-bit AES encryption of database files.
 - Secure Preferences - Android Shared preference wrapper than encrypts the keys and values of Shared Preferences. (Check what is a secret password/key for generetion key / Check where storing a key for decrypt SP(It can get into backup data))
 
+
 ### LOCAL AUTHENTICATION AND SESSION MANAGEMENT
+
 
 #### Testing Confirm Credentials (MSTG-AUTH-1 and MSTG-STORAGE-11)
 
@@ -179,9 +185,23 @@ You can also search for classes used for local authentication:
 - Sessions are invalidated at the remote endpoint after a predefined period of inactivity and access tokens expire. (MSTG‑AUTH‑7)
 
 
-## L2 security verification level
+### PLATFORM INTERACTION
 
+
+#### App permissoins (MSTG‑PLATFORM‑1)
+
+The app only requests the minimum set of permissions necessary.
+
+
+#### All input validation (MSTG‑PLATFORM‑2)
+
+All inputs from external sources and the user are validated and if necessary sanitized. This includes data received via the UI, IPC mechanisms such as intents, custom URLs, and network sources.
+
+
+
+## L2 security verification level
 <!-- If you despaired or just "L2 security verification level" -->
+
 
 #### Determining Whether the Keyboard Cache Is Disabled for Text Input Fields (MSTG-STORAGE-5)
 
@@ -200,7 +220,9 @@ You can also search for classes used for local authentication:
 
 - Is /*identify sensitive information*/ or /*credentials*/ stored in memory too long.
 
+
 ### AUTHENTICATION AND SESSION MANAGMENT
+
 
 #### Testing the Device-Access-Security Policy (MSTG-SDjTORAGE-11)
 
@@ -227,7 +249,6 @@ public void authenticationSucceeded(FingerprintManager.AuthenticationResult resu
 
 If app does not use cipher object and simply checks its appearance, this is called "event-bound authentication".
 
-
 #### A second factor of authentication (MSTG‑AUTH‑9)
 
 A second factor of authentication exists at the remote endpoint and the 2FA requirement is consistently enforced.
@@ -239,6 +260,7 @@ Sensitive transactions require step-up authentication.
 #### Monitoring and logging for user (MSTG‑AUTH‑11)
 
 The app informs the user of all sensitive activities with their account. Users are able to view a list of devices, view contextual information (IP address, location, etc.), and to block specific devices.
+
 
 ### Network Communication Requirements
 
